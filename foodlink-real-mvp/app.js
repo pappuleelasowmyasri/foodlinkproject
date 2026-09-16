@@ -341,7 +341,8 @@ async function logout() {
 
   profile = null;
 
-  show("home");
+  show("browse");
+  await loadListings();
 
   toast("Logged out");
 }
