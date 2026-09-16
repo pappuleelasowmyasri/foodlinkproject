@@ -405,124 +405,94 @@ function esc(s) {
 // ===============================
 
 async function loadListings() {
+  const grid = document.getElementById("listingGrid");
 
-  const grid =
-    document.getElementById("listingGrid");
+  if (!grid) return;
 
-  if (!sb) {
+  grid.innerHTML = `
+    <div class="card">
+      <p class="muted">Loading available food...</p>
+    </div>
+  `;
 
-    grid.innerHTML = `
-      <div class="empty">
-        Connect Supabase to load real listings.
-      </div>
-    `;
-
-    return;
-  }
-
-
-  const {
-    data,
-    error
-  } = await sb
+  const { data, error } = await sb
     .from("food_listings")
-    .select(
-      "*,profiles(display_name)"
-    )
+    .select("*")
     .eq("status", "available")
-    .gt(
-      "pickup_deadline",
-      new Date().toISOString()
-    )
-    .order("pickup_deadline");
-
+    .gt("pickup_deadline", new Date().toISOString())
+    .order("pickup_deadline", { ascending: true });
 
   if (error) {
+    console.error(error);
 
     grid.innerHTML = `
-      <div class="empty">
-        ${esc(error.message)}
+      <div class="card">
+        <p>Unable to load available food.</p>
+        <p class="muted">${error.message}</p>
       </div>
     `;
 
     return;
   }
 
-
-  if (!data?.length) {
-
+  if (!data || data.length === 0) {
     grid.innerHTML = `
-      <div class="empty">
-        No active surplus food is available right now.
+      <div class="card">
+        <h3>No food available right now</h3>
+        <p class="muted">
+          New surplus food listings will appear here.
+        </p>
       </div>
     `;
 
     return;
   }
 
+  grid.innerHTML = data.map(food => {
 
-  grid.innerHTML =
-    data
-      .map(
-        x => `
+    const quantity =
+      food.available_quantity !== null
+        ? `${food.available_quantity} ${food.quantity_unit || "meals"}`
+        : food.quantity;
 
-        <article class="card">
+    return `
+      <div class="card">
 
-          <span class="tag">
-            ${esc(x.food_type)}
-          </span>
+        <span class="badge">${escapeHtml(food.food_type)}</span>
 
-          <h3>
-            ${esc(x.food_name)}
-          </h3>
+        <h3>${escapeHtml(food.food_name)}</h3>
 
-          <div class="meta">
+        <p>
+          <strong>Available:</strong>
+          ${escapeHtml(String(quantity))}
+        </p>
 
-            🏪
-            ${esc(
-              x.profiles?.display_name ||
-              "Food provider"
-            )}
+        <p>
+          <strong>Location:</strong>
+          ${escapeHtml(food.location)}
+        </p>
 
-            <br>
+        <p>
+          <strong>Pickup before:</strong>
+          ${new Date(food.pickup_deadline).toLocaleString()}
+        </p>
 
-            📦
-            ${esc(x.quantity)}
+        ${
+          food.notes
+            ? `<p class="muted">${escapeHtml(food.notes)}</p>`
+            : ""
+        }
 
-            <br>
+        <button
+          class="primary full"
+          onclick="openReceiverForm('${food.id}')"
+        >
+          Apply to Receive
+        </button>
 
-            📍
-            ${esc(x.location)}
-
-            <br>
-
-            ⏰ Pickup before
-            ${new Date(
-              x.pickup_deadline
-            ).toLocaleString()}
-
-          </div>
-
-          ${
-            profile?.role === "organization"
-
-              ? `
-                <button
-                  class="primary"
-                  onclick="claim('${x.id}')"
-                >
-                  Claim food
-                </button>
-              `
-
-              : ""
-          }
-
-        </article>
-
-      `
-      )
-      .join("");
+      </div>
+    `;
+  }).join("");
 }
 
 
@@ -1054,7 +1024,167 @@ async function renderOrganization() {
 
     `;
 }
+// =========================================================
+// RECEIVER APPLICATION
+// =========================================================
 
+async function openReceiverForm(listingId) {
+
+  const modal = document.getElementById("receiverModal");
+  const listingInput = document.getElementById("receiverListingId");
+  const message = document.getElementById("receiverMsg");
+
+  if (!modal || !listingInput) return;
+
+  listingInput.value = listingId;
+
+  message.textContent = "";
+  message.className = "message";
+
+  document.getElementById("receiverForm").reset();
+
+  // Reset listing ID because reset() clears it
+  listingInput.value = listingId;
+
+  modal.classList.remove("hidden");
+
+  document.getElementById("receiverName").focus();
+}
+
+
+function closeReceiverForm() {
+
+  const modal = document.getElementById("receiverModal");
+
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+
+}
+
+
+async function submitReceiverRequest(event) {
+
+  event.preventDefault();
+
+  const button =
+    document.getElementById("receiverSubmitButton");
+
+  const message =
+    document.getElementById("receiverMsg");
+
+  const listingId =
+    document.getElementById("receiverListingId").value;
+
+  const receiverName =
+    document.getElementById("receiverName").value.trim();
+
+  const phone =
+    document.getElementById("receiverPhone").value.trim();
+
+  const location =
+    document.getElementById("receiverLocation").value.trim();
+
+  const quantity =
+    Number(document.getElementById("receiverQuantity").value);
+
+  const notes =
+    document.getElementById("receiverNotes").value.trim();
+
+
+  if (!listingId) {
+    message.textContent = "Food listing not found.";
+    message.className = "message error";
+    return;
+  }
+
+
+  if (!receiverName || !phone || !location) {
+    message.textContent =
+      "Please fill in all required fields.";
+
+    message.className = "message error";
+    return;
+  }
+
+
+  if (!quantity || quantity <= 0) {
+    message.textContent =
+      "Please enter a valid quantity.";
+
+    message.className = "message error";
+    return;
+  }
+
+
+  button.disabled = true;
+  button.textContent = "Submitting...";
+
+  message.textContent = "";
+
+
+  try {
+
+    const { data, error } = await sb.rpc(
+      "apply_to_receive",
+      {
+        p_listing_id: listingId,
+        p_receiver_name: receiverName,
+        p_phone: phone,
+        p_location: location,
+        p_requested_quantity: quantity,
+        p_notes: notes || null
+      }
+    );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    console.log("Receiver request:", data);
+
+
+    message.textContent =
+      "Request submitted successfully!";
+
+    message.className = "message success";
+
+
+    showToast(
+      "Food request submitted successfully."
+    );
+
+
+    // Wait briefly so user sees success
+    setTimeout(async () => {
+
+      closeReceiverForm();
+
+      await loadListings();
+
+    }, 1200);
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      error.message ||
+      "Unable to submit request.";
+
+    message.className = "message error";
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Apply to Receive";
+
+  }
+
+}
 
 // ===============================
 // START APP

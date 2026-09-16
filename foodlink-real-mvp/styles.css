@@ -19,3 +19,78 @@
   font-size: 20px;
   padding: 8px;
 }
+/* ================================
+   RECEIVER APPLICATION MODAL
+================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modalBox {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.modalBox h2 {
+  margin: 12px 0 8px;
+  font-size: 30px;
+}
+
+.modalBox label {
+  display: block;
+  margin-top: 16px;
+  font-weight: 600;
+}
+
+.modalBox input,
+.modalBox textarea {
+  width: 100%;
+  margin-top: 7px;
+  padding: 13px 14px;
+  border: 1px solid #dfe8e1;
+  border-radius: 10px;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.modalBox textarea {
+  resize: vertical;
+}
+
+.modalClose {
+  position: absolute;
+  right: 18px;
+  top: 15px;
+  border: none;
+  background: transparent;
+  font-size: 30px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modalClose:hover {
+  opacity: 0.7;
+}
+
+#receiverMsg {
+  margin-top: 15px;
+}

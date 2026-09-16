@@ -88,9 +88,95 @@
   </section>
 </main>
 
-<div id="toast"></div>
-<footer>FoodLink • Built to reduce food waste through local coordination</footer>
+<!-- Receiver Application Modal -->
+<div id="receiverModal" class="modal hidden">
+  <div class="modalBox">
 
+    <button class="modalClose" onclick="closeReceiverForm()">×</button>
+
+    <span class="badge">Receive Food</span>
+
+    <h2>Apply to Receive Food</h2>
+
+    <p class="muted">
+      Fill in your details and the quantity you need.
+    </p>
+
+    <form id="receiverForm" onsubmit="submitReceiverRequest(event)">
+
+      <input type="hidden" id="receiverListingId">
+
+      <label>
+        Organization / Receiver Name
+        <input
+          id="receiverName"
+          type="text"
+          placeholder="Enter organization or receiver name"
+          required
+        >
+      </label>
+
+      <label>
+        Phone Number
+        <input
+          id="receiverPhone"
+          type="tel"
+          placeholder="Enter phone number"
+          required
+        >
+      </label>
+
+      <label>
+        Location
+        <input
+          id="receiverLocation"
+          type="text"
+          placeholder="Enter pickup location"
+          required
+        >
+      </label>
+
+      <label>
+        Quantity Required
+        <input
+          id="receiverQuantity"
+          type="number"
+          min="1"
+          step="0.01"
+          placeholder="Enter quantity"
+          required
+        >
+      </label>
+
+      <label>
+        Notes
+        <textarea
+          id="receiverNotes"
+          placeholder="Any additional information (optional)"
+          rows="3"
+        ></textarea>
+      </label>
+
+      <button
+        type="submit"
+        class="primary full"
+        id="receiverSubmitButton"
+      >
+        Apply to Receive
+      </button>
+
+    </form>
+
+    <div id="receiverMsg" class="message"></div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<footer>
+  FoodLink • Built to reduce food waste through local coordination
+</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="app.js"></script>
 </body>
