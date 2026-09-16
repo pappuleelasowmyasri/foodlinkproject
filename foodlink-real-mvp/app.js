@@ -69,27 +69,54 @@ async function loadUser() {
   if (!sb) return;
 
   const {
-    data: { user }
+    data: { user },
+    error: userError
   } = await sb.auth.getUser();
 
-  if (user) {
-
-    const { data } = await sb
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
-    profile = data;
-
-    updateNav(true);
-
-  } else {
-
+  if (userError || !user) {
     profile = null;
     updateNav(false);
-
+    return;
   }
+
+  // Find the user's FoodLink profile
+  const { data: existingProfile, error: profileError } = await sb
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  // If profile doesn't exist, create it
+  if (!existingProfile) {
+    const name =
+      user.user_metadata?.display_name || "FoodLink User";
+
+    const role =
+      user.user_metadata?.role || "provider";
+
+    const { data: newProfile, error: createError } = await sb
+      .from("profiles")
+      .insert({
+        id: user.id,
+        display_name: name,
+        role: role
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      console.error("Could not create profile:", createError);
+      profile = null;
+      updateNav(true);
+      return;
+    }
+
+    profile = newProfile;
+  } else {
+    profile = existingProfile;
+  }
+
+  updateNav(true);
 }
 
 
