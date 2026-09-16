@@ -263,7 +263,7 @@ async function handleAuth(e) {
       options: {
 
         emailRedirectTo:
-          "http://127.0.0.1:5500/",
+          "https://foodlinkproject.vercel.app/",
 
         data: {
           display_name: name,
