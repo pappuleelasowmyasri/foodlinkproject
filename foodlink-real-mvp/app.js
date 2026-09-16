@@ -38,6 +38,7 @@ function init() {
   });
 
   loadUser();
+  loadListings();
 }
 
 
