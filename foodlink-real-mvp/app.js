@@ -224,11 +224,11 @@ async function handleAuth(e) {
       return msg(error.message);
     }
 
-    msg("Logged in successfully.");
-
-    show("dashboard");
-
-    return;
+   msg("Logged in successfully.");
+  await loadUser();
+  show("dashboard");
+  await loadDashboard();
+  return;
   }
 
 
