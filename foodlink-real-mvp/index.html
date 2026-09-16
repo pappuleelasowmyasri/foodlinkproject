@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FoodLink — Surplus Food Network</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="nav">
+    <a class="brand" href="#" onclick="show('home')">Food<span>Link</span> ♻</a>
+    <div id="navActions"></div>
+  </div>
+</header>
+
+<main>
+  <section id="home" class="page active">
+    <div class="hero">
+      <div>
+        <span class="badge">SDG 2 • SDG 12</span>
+        <h1>Turn surplus food into meals, not waste.</h1>
+        <p>FoodLink connects food providers with verified community organizations for safe, timely surplus-food pickups.</p>
+        <div class="actions">
+          <button class="primary" onclick="show('auth')">Get started</button>
+          <button class="secondary" onclick="show('browse')">View available food</button>
+        </div>
+      </div>
+      <div class="heroCard">
+        <h3>How FoodLink works</h3>
+        <div class="step"><b>1</b><span>Restaurant posts surplus food</span></div>
+        <div class="step"><b>2</b><span>Verified organization claims it</span></div>
+        <div class="step"><b>3</b><span>Pickup is confirmed and completed</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="auth" class="page narrow">
+    <div class="panel">
+      <div class="tabs">
+        <button id="loginTab" class="tab active" onclick="authMode('login')">Login</button>
+        <button id="signupTab" class="tab" onclick="authMode('signup')">Create account</button>
+      </div>
+      <h2 id="authTitle">Welcome back</h2>
+      <p class="muted">Use an email address and password.</p>
+      <form id="authForm" onsubmit="handleAuth(event)">
+        <label>Email<input id="email" type="email" required></label>
+        <label>Password</label>
+
+<div class="password-wrapper">
+  <input
+    id="password"
+    type="password"
+    minlength="6"
+    required
+    placeholder="Enter your password"
+  >
+
+  <button
+    type="button"
+    class="show-password"
+    onclick="togglePassword()"
+    aria-label="Show or hide password"
+  >
+    👁
+  </button>
+</div>
+        <div id="signupFields" class="hidden">
+          <label>Organization / business name<input id="orgName"></label>
+          <label>Account type
+            <select id="role"><option value="provider">Restaurant / Hostel</option><option value="organization">NGO / Community Organization</option></select>
+          </label>
+        </div>
+        <button class="primary full" id="authButton">Login</button>
+      </form>
+      <div id="authMsg" class="message"></div>
+    </div>
+  </section>
+
+  <section id="dashboard" class="page">
+    <div class="pageHead"><div><span class="badge">Dashboard</span><h2 id="dashTitle">FoodLink</h2><p id="dashSubtitle" class="muted"></p></div><button class="secondary" onclick="logout()">Logout</button></div>
+    <div id="dashboardContent"></div>
+  </section>
+
+  <section id="browse" class="page">
+    <div class="pageHead"><div><span class="badge">Available food</span><h2>Current surplus listings</h2><p class="muted">Only active, unexpired listings are shown.</p></div><button class="secondary" onclick="loadListings()">Refresh</button></div>
+    <div id="listingGrid" class="grid"></div>
+  </section>
+</main>
+
+<div id="toast"></div>
+<footer>FoodLink • Built to reduce food waste through local coordination</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>

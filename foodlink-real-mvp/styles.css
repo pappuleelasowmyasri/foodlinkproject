@@ -1,0 +1,21 @@
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f8f5;color:#17351f}header{background:#fff;border-bottom:1px solid #e2e9e3;position:sticky;top:0;z-index:5}.nav{max-width:1100px;margin:auto;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}.brand{text-decoration:none;color:#21743b;font-size:23px;font-weight:850}.brand span{color:#d88b22}.nav button{border:0;background:none;color:#44604c;font-weight:700;margin-left:14px;cursor:pointer}.page{display:none;max-width:1100px;margin:auto;padding:55px 20px 75px}.page.active{display:block}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:45px;align-items:center;padding:65px 0}.hero h1{font-size:58px;line-height:1.02;letter-spacing:-2.5px;margin:15px 0}.hero p{font-size:18px;line-height:1.65;color:#637268;max-width:650px}.badge{display:inline-block;padding:7px 11px;border-radius:30px;background:#e5f4e9;color:#26733d;font-size:12px;font-weight:800}.actions{display:flex;gap:10px;margin-top:25px}.primary,.secondary,.danger{border-radius:9px;padding:12px 17px;font-weight:800;cursor:pointer}.primary{background:#247940;color:#fff;border:1px solid #247940}.secondary{background:#fff;color:#247940;border:1px solid #d2ded5}.danger{background:#fff2f0;color:#a33c30;border:1px solid #f1cfc9}.heroCard,.panel,.card{background:#fff;border:1px solid #dfe8e1;border-radius:16px;box-shadow:0 8px 25px #17351f0d}.heroCard{background:#174d2a;color:white;padding:28px}.step{display:flex;gap:13px;align-items:center;padding:16px 0;border-bottom:1px solid #ffffff24}.step:last-child{border:0}.step b{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#174d2a}.narrow{max-width:570px}.panel{padding:28px}.tabs{display:flex;gap:5px;margin-bottom:25px}.tab{border:0;background:#eef4ef;padding:10px 14px;border-radius:8px;font-weight:800;color:#55705b;cursor:pointer}.tab.active{background:#247940;color:#fff}.panel h2{margin-bottom:5px}.muted{color:#6a796f;line-height:1.5}form{display:grid;gap:14px;margin-top:22px}label{font-size:13px;font-weight:750;color:#45604c;display:grid;gap:6px}input,select,textarea{font:inherit;padding:11px;border:1px solid #d5dfd7;border-radius:8px;background:#fff}textarea{min-height:90px;resize:vertical}.full{width:100%}.hidden{display:none}.message{margin-top:14px;padding:11px;border-radius:8px;background:#e9f5eb;color:#28683a}.pageHead{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:25px}.pageHead h2{font-size:35px;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.card{padding:20px}.card h3{margin:10px 0 7px}.meta{color:#66766c;font-size:14px;line-height:1.7}.tag{display:inline-block;font-size:11px;background:#e9f5eb;color:#26733d;border-radius:20px;padding:5px 8px;font-weight:800}.card button{margin-top:15px;width:100%}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:22px}.stat{padding:20px;background:#fff;border:1px solid #dfe8e1;border-radius:14px}.stat strong{display:block;font-size:30px;margin-top:5px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.empty{text-align:center;padding:35px;background:#fff;border:1px dashed #cbd8ce;border-radius:14px;color:#69786e}.small{font-size:12px}.formTitle{margin-top:30px}#toast{position:fixed;right:20px;bottom:20px;background:#17351f;color:white;padding:13px 16px;border-radius:9px;display:none;z-index:20}footer{text-align:center;background:#17351f;color:#d7e6da;padding:23px;font-size:13px}@media(max-width:800px){.hero{grid-template-columns:1fr;padding:35px 0}.hero h1{font-size:42px}.grid,.stats,.two{grid-template-columns:1fr}.pageHead{display:block}.pageHead button{margin-top:12px}}
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 50px;
+}
+
+.show-password {
+  position: absolute;
+  right: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 8px;
+}
