@@ -95,14 +95,14 @@ async function loadUser() {
       user.user_metadata?.role || "provider";
 
     const { data: newProfile, error: createError } = await sb
-      .from("profiles")
-      .insert({
-        id: user.id,
-        display_name: name,
-        role: role
-      })
-      .select()
-      .single();
+  .from("profiles")
+  .upsert({
+    id: user.id,
+    display_name: name,
+    role: role
+  })
+  .select()
+  .single();
 
     if (createError) {
       console.error("Could not create profile:", createError);
